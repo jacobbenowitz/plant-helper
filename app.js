@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const picoMaker = require('./api/pico-maker');
-const pico2 = require('./api/pico-2');
+const readings = require('./routes/api/readings');
 const bodyParser = require('body-parser');
 const app = express();
 const db = require('./config/keys').mongoURI;
@@ -16,8 +15,7 @@ mongoose
 
 
 app.get('/', (req, res) => { res.send("Hello World!"); });
-app.use('/api/pico-maker', picoMaker);
-app.use('/api/pico-2', pico2);
+app.use('/api/readings', readings);
 
 const port = process.env.PORT || 5001;
 
