@@ -23,6 +23,8 @@ module.exports = function validatePicoMakerInput(data) {
 
   data.SoilMoisture = validText(data.SoilMoisture) ? 
     JSON.parse(data.SoilMoisture) : 0;
+  
+  data.PicoId = validText(data.PicoId) ? data.PicoId : '';
 
   if (data.EnvironmentTemperature === 0) {
     errors.EnvironmentTemperature = 'EnvironmentTemperature is not a number or reading is 0';
@@ -50,6 +52,10 @@ module.exports = function validatePicoMakerInput(data) {
 
   if (data.SoilMoisture === 0) {
     errors.SoilMoisture = 'SoilMoisture is not a number or reading is 0';
+  }
+
+  if (data.PicoId === '') {
+    errors.PicoId = 'PicoId is required';
   }
 
   return {

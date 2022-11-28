@@ -42,6 +42,7 @@ router.post('/pico-maker', (req, res) => {
     EnvironmentFootcandles: req.body.EnvironmentFootcandles,
     SoilTemperature: req.body.SoilTemperature,
     SoilMoisture: req.body.SoilMoisture,
+    PicoId: req.body.PicoId,
   });
 
   newPicoMaker.save().then(picoMakerData => res.json(picoMakerData));
@@ -60,6 +61,7 @@ router.post('/pico-2', (req, res) => {
     EnvironmentHumidity: req.body.EnvironmentHumidity,
     EnvironmentLux: req.body.EnvironmentLux,
     EnvironmentFootcandles: req.body.EnvironmentFootcandles,
+    PicoId: req.body.PicoId,
   });
 
   newPico2.save().then(pico2 => res.json(pico2));

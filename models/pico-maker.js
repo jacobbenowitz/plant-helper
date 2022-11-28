@@ -30,6 +30,10 @@ const PicoMakerSchema = new Schema({
     type: Number,
     required: false
   },
+  PicoId: {
+    type: String,
+    required: true
+  }
 }, {
   timestamps: true
 });
