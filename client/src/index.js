@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { store } from './store/store.js';
+import  {fetchPico2Readings}  from './actions/pico-2-actions.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+window.getState = store.getState;
+window.dispatch = store.dispatch;
+window.getPicoData = () => store.dispatch(fetchPico2Readings());
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App store={store} />
   </React.StrictMode>
 );
 
