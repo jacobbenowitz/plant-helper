@@ -1,5 +1,8 @@
 import {
-  RECEIVE_PICO_2_READINGS
+  RECEIVE_PICO_2_CURRENT,
+  RECEIVE_PICO_2_READINGS,
+  REQUEST_PICO_2_CURRENT,
+  REQUEST_PICO_2_READINGS
 } from '../actions/pico-2-actions';
 
 const BUSY = 'BUSY';
@@ -9,6 +12,7 @@ const DONE = 'DONE';
 const initState = {
   status: IDLE,
   readings: [],
+  current: {},
 }
 
 const pico2Reducer = (state = initState, action) => {
@@ -17,8 +21,24 @@ const pico2Reducer = (state = initState, action) => {
       return {
         ...state,
         status: DONE,
-        readings: action.readings,
+        readings: action.data,
       };
+    case REQUEST_PICO_2_READINGS:
+      return {
+        ...state,
+        status: BUSY,
+      }
+    case REQUEST_PICO_2_CURRENT:
+      return {
+        ...state,
+        status: BUSY,
+      }
+    case RECEIVE_PICO_2_CURRENT:
+      return {
+        ...state,
+        status: DONE,
+        current: action.data,
+      }
     default:
       return state;
   }

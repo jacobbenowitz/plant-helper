@@ -6,9 +6,9 @@ const validatePico2Input = require('../validations/pico-2');
 const pingPico2 = () => {
   cron.schedule('*/2 * * * *', async() => {
     console.log('fetching pico2 data every two minutes');
-    const response = await fetch('http://192.168.1.172/');
+    const response = await fetch('http://192.168.1.163:80');
     const data = await response.json();
-    // console.log('data received: ' + JSON.stringify(data));
+    console.log('data received: ' + JSON.stringify(data));
 
     const { errors, isValid } = validatePico2Input(data);
 

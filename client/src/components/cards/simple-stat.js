@@ -1,21 +1,29 @@
 import * as React from "react";
-import { Card, CardContent, Typography } from "@mui/material"
+import { Card, CardContent, CardMedia, Typography } from "@mui/material"
+import { Container, Stack } from "@mui/system";
 
-const SimpleStat = () => {
+const SimpleStat = ({name = 'Metric Name', value = 0, suffix = ''}) => {
 
   return (
     <Card elevation={16}>
-      <CardContent sx={{minWidth: 275}}>
-        <Typography
-          sx={{ fontSize: 14 }}
-          color="text.secondary"
-          gutterBottom
-        >
-          Metric Name
-        </Typography>
-        <Typography variant="h5">
-          100
-        </Typography>
+      <CardContent sx={{ minWidth: 275 }}>
+        <Stack spacing={2}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            gutterBottom
+          >
+            {name}
+          </Typography>
+          <Stack direction="row" spacing={0.5} alignItems="baseline">
+            <Typography variant="h5">
+              {value}
+            </Typography>
+            <Typography variant="h6" color="text.secondary">
+              {suffix}
+            </Typography>
+          </Stack>
+        </Stack>
       </CardContent>
     </Card>
   )
