@@ -1,33 +1,18 @@
-import {
-  useState
-} from "react";
+import * as React from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material"
 import { Container, Stack } from "@mui/system";
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
-const SimpleStat = ({ name = 'Metric Name', value = 0, suffix = '', id }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+const SimpleStatBasic = ({
+  name = 'Metric Name',
+  value = 0,
+  suffix = '',
+  id
+}) => {
   return (
     <Card
       elevation={16}
       id={id}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
+      sx={{ cursor: 'grabbing' }}
     >
       <CardContent sx={{ minWidth: 275 }}>
         <Stack spacing={2}>
@@ -52,4 +37,4 @@ const SimpleStat = ({ name = 'Metric Name', value = 0, suffix = '', id }) => {
   )
 }
 
-export default SimpleStat;
+export default SimpleStatBasic;

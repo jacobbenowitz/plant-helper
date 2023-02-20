@@ -108,13 +108,6 @@ function App() {
         />
       </Paper>
 
-      <Paper elevation={4} sx={{
-        margin: '4rem',
-        padding: '2rem 2.5rem 2rem 1rem',
-      }}>
-        <LineChart2 />
-      </Paper>
-
       <Stack direction='row' spacing={2} sx={{
         margin: '4rem',
       }}>
@@ -228,6 +221,13 @@ function App() {
           </Stack>
         </Paper>
       </Stack>
+
+      <Paper elevation={4} sx={{
+        margin: '4rem',
+        padding: '2rem 2.5rem 2rem 1rem',
+      }}>
+        <LineChart2 />
+      </Paper>
 
       {/* TODO: Create card component for easy reuse */}
       {/* <LineChartCard

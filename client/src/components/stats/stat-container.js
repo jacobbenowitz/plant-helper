@@ -18,15 +18,72 @@ import {
 import { Stack } from '@mui/system';
 import moment from 'moment';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import SimpleStatBasic from '../cards/simple-stat-basic';
+
+const initStatItems = [
+  { id: 'humidity-stat', name: 'Humidity', value: 0, suffix: '%' },
+  { id: 'temp-stat', name: 'Temperature', value: 0, suffix: '°F' },
+  { id: 'footcandles-stat', name: 'Footcandles', value: 0, suffix: 'fc' },
+]
 
 const StatContainer = ({ name }) => {
   const dispatch = useDispatch();
 
   const [currentPico2Readings, setCurrentPico2Readings] = useState({});
   const [lastRefresh, setLastRefresh] = useState('');
+  const [activeItem, setActiveItem] = useState(null);
 
   const pico2Current = useSelector(state => selectPico2Current(state));
   const pico2Status = useSelector(state => selectPico2Status(state));
+
+  const [statItems, setStatItems] = useState(initStatItems);
+
+  useEffect(() => {
+    if (currentPico2Readings) {
+      const newReadings = statItems.map(item => {
+        if (item.id === 'humidity-stat') {
+          return {
+            ...item,
+            value: currentPico2Readings?.EnvironmentHumidity,
+          }
+        } else if (item.id === 'temp-stat') {
+          return {
+            ...item,
+            value: currentPico2Readings?.EnvironmentTemperature,
+          }
+        } else if (item.id === 'footcandles-stat') {
+          return {
+            ...item,
+            value: currentPico2Readings?.EnvironmentFootcandles,
+          }
+        }
+      })
+      setStatItems(newReadings)
+    }
+  }, [currentPico2Readings]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   // fetch data on mount
   useEffect(() => {
@@ -40,6 +97,26 @@ const StatContainer = ({ name }) => {
       setCurrentPico2Readings(pico2Current);
     }
   }, [pico2Current]);
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setStatItems((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+    setActiveItem(null);
+  }
+
+  const handleDragStart = (event) => {
+    const { active } = event;
+    const item = statItems.find(item => item.id === active.id);
+    setActiveItem(item);
+  }
+
 
   return (
     <Grid2 container spacing={4}>
@@ -72,28 +149,45 @@ const StatContainer = ({ name }) => {
           </Stack>
         </Stack>
       </Grid2>
-      <Grid2 xs={4}>
-        <SimpleStat
-          name='Humidity'
-          value={currentPico2Readings?.EnvironmentHumidity}
-          suffix='%'
-        />
-      </Grid2>
-      <Grid2 xs={4}>
-        <SimpleStat
-          name='Temperature'
-          value={currentPico2Readings?.EnvironmentTemperature}
-          suffix='°F'
-        />
-      </Grid2>
-      <Grid2 xs={4}>
-        <SimpleStat
-          name='Footcanles'
-          value={currentPico2Readings?.EnvironmentFootcandles}
-          suffix='fc'
-        />
-      </Grid2>
-    </Grid2>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
+      >
+        <SortableContext
+          items={statItems}
+          strategy={rectSortingStrategy}
+        >
+          {statItems.map((item, index) => (
+            <Grid2 xs={4} id={item.id} key={item.id}
+              sx={activeItem?.id === item.id ? {
+                opacity: 0.5
+              } : {
+                opacity: 1
+              }}
+            >
+              <SimpleStat
+                name={item.name}
+                value={item.value}
+                suffix={item.suffix}
+                id={item.id}
+              />
+            </Grid2>
+          ))}
+        </SortableContext>
+        <DragOverlay>
+          {activeItem ? (
+            <SimpleStatBasic
+              id={activeItem.id}
+              name={activeItem.name}
+              value={activeItem.value}
+              suffix={activeItem.suffix}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </Grid2 >
   )
 }
 
