@@ -18,6 +18,7 @@ const SimpleStat = ({ name = 'Metric Name', value = 0, suffix = '', id }) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    cursor: 'grab',
   };
 
   return (

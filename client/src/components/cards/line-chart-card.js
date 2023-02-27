@@ -1,13 +1,13 @@
 import LineChart from '../charts/line-chart';
 import { Chip, Paper, Stack, Typography } from '@mui/material';
+import SingleLineChart from '../charts/single-line-chart';
 
 const LineChartCard = ({
   title,
   chipLabel,
   data,
-  ref,
-  width,
   height,
+  color,
 }) => {
 
   return (
@@ -15,7 +15,7 @@ const LineChartCard = ({
       margin: '4rem',
     }}>
       <Paper elevation={4} sx={{
-        height: '300px',
+        height: height,
         width: '100%',
         borderRadius: '4px',
         overflow: 'visable',
@@ -32,16 +32,15 @@ const LineChartCard = ({
             }}>
               {title}
             </Typography>
-            <Chip label={chipLabel} />
+            <Chip label={chipLabel} size="small" />
           </Stack>
-          <div ref={ref} style={{
+          <div style={{
             width: '100%',
-            height: '250px',
+            height: height - 50,
           }}>
-            <LineChart
+            <SingleLineChart
               data={data}
-              width={width}
-              height={height}
+              color={color}
             />
           </div>
         </Stack>

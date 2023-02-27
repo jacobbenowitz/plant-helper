@@ -12,7 +12,7 @@ const LineChart = ({ data = [], width, height }) => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (data?.length) {
+    if (data && data?.length) {
       setReady(true);
     }
   }, [data])
@@ -28,12 +28,12 @@ const ChartInner = ({ data, width, height, ready }) => {
   const theme = useTheme();
   const svgRef = useRef();
 
-  const margin = { top: 25, right: 0, bottom: 25, left: 5 }
+  const margin = { top: 25, right: 0, bottom: 25, left: 25 }
 
   // const svg = d3.select(svgRef.current)
 
   const xScale = d3.scaleLinear()
-    .domain([-7, data.length - 1])               // min, max of INPUT values
+    .domain([-15, data.length - 1])               // min, max of INPUT values
     .range([margin.left, width - margin.right]) // min, max of OUTPUT values
 
   const yScale = d3.scaleLinear()
@@ -65,9 +65,9 @@ const ChartInner = ({ data, width, height, ready }) => {
       {
         yScale.ticks(5).map(tick => (
           <g key={tick} transform={`translate(10, ${yScale(tick)})`}>
-            <line x1={margin.left + 20} x2={width - margin.right} stroke={theme.palette.grey[800]} />
+            <line x1={margin.left + 2} x2={width - margin.right} stroke={theme.palette.grey[800]} />
             <text
-              x={margin.left - 5} y={5}
+              x={margin.left - 20} y={5}
               fill={theme.palette.grey[700]}
               style={{ fontSize: 12 }}
             >
